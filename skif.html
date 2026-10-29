@@ -1,0 +1,327 @@
+<!DOCTYPE html>      
+<html lang="uk">      
+<head>      
+    <meta charset="UTF-8">      
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">      
+    <title>Донесення БпЛА — МВГр «Скіф»</title>      
+    <style>      
+        * { box-sizing: border-box; }      
+        body {       
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;       
+            background-color: #f0f2f5; padding: 10px; margin: 0; font-size: 16px;      
+        }      
+        .container { max-width: 100%; margin: auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }      
+        h2 { text-align: center; color: #1a73e8; font-size: 1.2rem; margin: 10px 0 20px; }      
+        .section-title { font-weight: bold; margin-bottom: 10px; color: #1a73e8; display: block; border-left: 4px solid #1a73e8; padding-left: 8px; font-size: 0.9rem; text-transform: uppercase; }      
+        .block { background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 15px; }      
+        .input-group { display: flex; flex-direction: column; margin-bottom: 12px; width: 100%; }      
+        .mobile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }      
+        label { font-weight: bold; margin-bottom: 4px; font-size: 0.85rem; color: #555; }      
+        input, select { width: 100%; padding: 12px; border: 1px solid #dadce0; border-radius: 8px; font-size: 16px; background: white; -webkit-appearance: none; }      
+              
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin: 8px 0; background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #dadce0; }      
+        .checkbox-group input[type="checkbox"] { width: 22px; height: 22px; }      
+      
+        .fire-yes, .fire-no { display: none; margin-top: 5px; }      
+        .output-section { background: #e8f0fe; padding: 15px; border-radius: 8px; border: 1px solid #1a73e8; margin-top: 10px; }      
+              
+        #finalText {       
+            white-space: pre-wrap; font-family: monospace; line-height: 1.4; font-size: 14px;       
+            word-break: break-word; background: white; padding: 12px; border: 2px solid #c3dafb;      
+            border-radius: 8px; user-select: all; -webkit-user-select: all; cursor: pointer;      
+        }      
+              
+        .btn-copy { width: 100%; margin-top: 15px; padding: 18px; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; background-color: #34a853; color: white; font-weight: bold; }      
+        .quick-time { color: #1a73e8; font-size: 0.8rem; margin-top: 5px; text-align: right; font-weight: bold; padding: 5px; cursor: pointer; }      
+        .manual-reason { margin-top: 10px; display: none; }      
+        .ammo-fields { display: none; margin-left: 20px; margin-bottom: 10px; padding: 8px; background: #fff; border-left: 3px solid #1a73e8; border-radius: 4px; }      
+    </style>      
+</head>      
+<body>      
+      
+<div class="container">      
+    <h2>📝 Донесення БпЛА (МВГр «Скіф»)</h2>      
+      
+    <div class="block">      
+        <span class="section-title">Виявлення та Час</span>      
+        <div class="input-group">      
+            <label>Дата та Час:</label>      
+            <input type="text" id="timeInput" oninput="updateText()">      
+            <div class="quick-time" onclick="setCurrentDateTime()">🕒 Поставити поточні дату і час</div>      
+        </div>      
+        <div class="mobile-grid">      
+            <div class="input-group">      
+                <label>Кількість БпЛА:</label>      
+                <input type="number" id="bplaCount" value="1" onfocus="this.select()" oninput="updateText()">      
+            </div>      
+            <div class="input-group">      
+                <label>Номер БпЛА (ціль):</label>      
+                <input type="number" id="bplaNumber" placeholder="8280" onfocus="this.select()" oninput="updateText()">      
+            </div>      
+        </div>      
+        <div class="input-group">      
+            <label>Спосіб виявлення:</label>      
+            <select id="detectionType" onchange="updateText()">      
+                <option value="акустично" selected>акустично</option>      
+                <option value="акустично швидкісний">акустично швидкісний</option>      
+                <option value="за шумом двигуна">за шумом двигуна</option>      
+                <option value="візуально">візуально</option>      
+                <option value="візуально через тепловізор">візуально через тепловізор</option>      
+                <option value="за допомогою &quot;Віраж-Планшет&quot;">за допомогою "Віраж-Планшет"</option>      
+            </select>      
+        </div>      
+    </div>      
+      
+    <div class="block">      
+        <span class="section-title">Параметри польоту</span>      
+        <div class="mobile-grid">      
+            <div class="input-group"><label>Курс:</label><input type="number" id="course" value="93" onfocus="this.select()" oninput="updateText()"></div>      
+            <div class="input-group"><label>Азимут:</label><input type="number" id="azimuth" value="320" onfocus="this.select()" oninput="updateText()"></div>      
+            <div class="input-group"><label>Відстань (м):</label><input type="text" id="distance" value="100" onfocus="this.select()" oninput="updateText()"></div>      
+            <div class="input-group"><label>Висота (м):</label><input type="text" id="altitude" value="1500" onfocus="this.select()" oninput="updateText()"></div>      
+            <div class="input-group"><label>Швидкість (км/год):</label><input type="number" id="speed" value="286" onfocus="this.select()" oninput="updateText()"></div>      
+        </div>      
+        <div class="input-group">      
+            <label>Напрямок (н.п.):</label>      
+            <select id="location" onchange="updateText()">      
+                <option value="Надіївка" selected>Надіївка</option>      
+                <option value="Зорівка">Зорівка</option>      
+                <option value="Молодецьке">Молодецьке</option>      
+                <option value="Мирне">Мирне</option>      
+                <option value="Миролюбівка">Миролюбівка</option>      
+                <option value="Правління">Правління</option>      
+                <option value="Солдаське">Солдаське</option>      
+                <option value="Посад-Покровське">Посад-Покровське</option>      
+                <option value="Благодатне">Благодатне</option>      
+                <option value="Зелений Гай">Зелений Гай</option>      
+                <option value="Барвінок">Барвінок</option>      
+                <option value="Крутий Яр">Крутий Яр</option>      
+                <option value="Музиківка">Музиківка</option>      
+                <option value="Висунці">Висунці</option>      
+                <option value="Чорнобаївка">Чорнобаївка</option>      
+                <option value="Клапая">Клапая</option>      
+            </select>      
+        </div>      
+    </div>      
+      
+    <div class="block">      
+        <span class="section-title">Дії по цілі</span>      
+        <div class="input-group">      
+            <label>Вогонь:</label>      
+            <select id="fireAction" onchange="toggleFireBlock()">      
+                <option value="yes">Вогонь відкривали</option>      
+                <option value="no" selected>Вогонь не відкривали</option>      
+            </select>      
+        </div>      
+      
+        <div id="blockYes" class="fire-yes">      
+            <div class="input-group">      
+                <label>Результат:</label>      
+                <select id="fireResult" onchange="updateText()">      
+                    <option value="ціль уражено">ціль уражено</option>      
+                    <option value="ціль не уражено" selected>ціль не уражено</option>      
+                </select>      
+            </div>      
+              
+            <label style="font-size: 0.85rem; font-weight: bold; color: #1a73e8; margin-top: 5px; display: block;">Виберіть зброю та вкажіть витрату:</label>      
+              
+            <!-- Browning M2 -->      
+            <div class="checkbox-group">      
+                <input type="checkbox" id="useBrowning" checked onchange="toggleAmmoInput('Browning')">      
+                <label for="useBrowning" style="margin:0; cursor:pointer;">Browning M2</label>      
+            </div>      
+            <div id="fieldBrowning" class="ammo-fields">      
+                <div class="input-group" style="margin-bottom:0;"><label>Витрата (шт/набоїв):</label><input type="number" id="ammoBrowning" value="50" onfocus="this.select()" oninput="updateText()"></div>      
+            </div>      
+      
+            <!-- ПКТ -->      
+            <div class="checkbox-group">      
+                <input type="checkbox" id="usePkt" onchange="toggleAmmoInput('Pkt')">      
+                <label for="usePkt" style="margin:0; cursor:pointer;">ПКТ</label>      
+            </div>      
+            <div id="fieldPkt" class="ammo-fields">      
+                <div class="input-group" style="margin-bottom:0;"><label>Витрата (шт/набоїв):</label><input type="number" id="ammoPkt" value="0" onfocus="this.select()" oninput="updateText()"></div>      
+            </div>      
+      
+            <!-- АК-74 -->      
+            <div class="checkbox-group">      
+                <input type="checkbox" id="useAk" onchange="toggleAmmoInput('Ak')">      
+                <label for="useAk" style="margin:0; cursor:pointer;">АК-74</label>      
+            </div>      
+            <div id="fieldAk" class="ammo-fields">      
+                <div class="input-group" style="margin-bottom:0;"><label>Витрата (шт/набоїв):</label><input type="number" id="ammoAk" value="0" onfocus="this.select()" oninput="updateText()"></div>      
+            </div>      
+        </div>      
+      
+        <div id="blockNo" class="fire-no">      
+            <div class="input-group">      
+                <label>Причина невідкриття вогню:</label>      
+                <select id="fireReasonList" onchange="toggleManualReason()">      
+                    <option value="велику відстань та не встановлення візуального контакту">велика відстань та не встановлення візуального контакту</option>      
+                    <option value="не встановлено візуального контакту. Погіршення погодних умов (туман) видимість обмежена" selected>не встановлено візуального контакту (туман/видимість обмежена)</option>      
+                    <option value="не коректну роботу БРМ Тандем">некоректна робота БРМ Тандем</option>      
+                    <option value="в зв'язку з тим, що напрямок ведення вогню проходив через населений пункт">напрямок ведення вогню проходив через н.п.</option>      
+                    <option value="manual">Інша причина (ввести вручну)...</option>      
+                </select>      
+                <input type="text" id="noFireReasonManual" class="manual-reason" placeholder="Введіть причину..." onfocus="this.select()" oninput="updateText()">      
+            </div>      
+        </div>      
+    </div>      
+      
+    <div class="output-section">      
+        <span class="section-title">Готовий текст:</span>      
+        <div id="finalText" onclick="selectAndCopy()"></div>      
+        <button class="btn-copy" onclick="copyResult()">📋 КОПІЮВАТИ ТЕКСТ</button>      
+    </div>      
+</div>      
+      
+<textarea id="tempTextArea" style="position:absolute; left:-9999px; top:-9999px;" readonly></textarea>      
+      
+<script>      
+    function toggleFireBlock() {      
+        const action = document.getElementById('fireAction').value;      
+        document.getElementById('blockYes').style.display = (action === 'yes') ? 'block' : 'none';      
+        document.getElementById('blockNo').style.display = (action === 'no') ? 'block' : 'none';      
+        updateText();      
+    }      
+      
+    function toggleAmmoInput(type) {      
+        const isChecked = document.getElementById('use' + type).checked;      
+        document.getElementById('field' + type).style.display = isChecked ? 'block' : 'none';      
+        updateText();      
+    }      
+      
+    function toggleManualReason() {      
+        const listValue = document.getElementById('fireReasonList').value;      
+        const manualInput = document.getElementById('noFireReasonManual');      
+        if (listValue === 'manual') {      
+            manualInput.style.display = 'block';      
+            manualInput.focus();      
+        } else {      
+            manualInput.style.display = 'none';      
+        }      
+        updateText();      
+    }      
+      
+    function setCurrentDateTime() {      
+        const now = new Date();      
+        const day = String(now.getDate()).padStart(2, '0');      
+        const month = String(now.getMonth() + 1).padStart(2, '0');      
+        const year = now.getFullYear();      
+        const hours = String(now.getHours()).padStart(2, '0');      
+        const minutes = String(now.getMinutes()).padStart(2, '0');      
+        document.getElementById('timeInput').value = `${day}.${month}.${year}, ${hours}:${minutes}`;      
+        updateText();      
+    }      
+      
+    function updateText() {      
+        const dateTime = document.getElementById('timeInput').value || "DD.MM.YYYY, HH:MM";      
+        const count = document.getElementById('bplaCount').value || "1";      
+        const det = document.getElementById('detectionType').value;      
+        const num = document.getElementById('bplaNumber').value ? ` (${document.getElementById('bplaNumber').value})` : "";      
+        const course = document.getElementById('course').value || "___";      
+        const azimuth = document.getElementById('azimuth').value || "___";      
+        const dist = document.getElementById('distance').value || "___";      
+        const alt = document.getElementById('altitude').value || "___";      
+        const speed = document.getElementById('speed').value || "___";      
+        const loc = document.getElementById('location').value;      
+      
+        let firePart = "";      
+        const fireActionVal = document.getElementById('fireAction').value;      
+        if (fireActionVal === 'yes') {      
+            const res = document.getElementById('fireResult').value;      
+              
+            let ammoList = [];      
+            if (document.getElementById('useBrowning').checked) {      
+                const qty = document.getElementById('ammoBrowning').value || "0";      
+                ammoList.push(`Browning M2 - ${qty} шт.`);      
+            }      
+            if (document.getElementById('usePkt').checked) {      
+                const qty = document.getElementById('ammoPkt').value || "0";      
+                ammoList.push(`ПКТ - ${qty} шт.`);      
+            }      
+            if (document.getElementById('useAk').checked) {      
+                const qty = document.getElementById('ammoAk').value || "0";      
+                ammoList.push(`АК-74 - ${qty} шт.`);      
+            }      
+              
+            const ammoText = ammoList.length > 0 ? ammoList.join(", ") : "зброя не вказана";      
+            firePart = `По цілі вогонь відкривали, ${res} (витрачено: ${ammoText}).`;      
+        } else {      
+            const listVal = document.getElementById('fireReasonList').value;      
+            const manualReason = document.getElementById('noFireReasonManual').value;      
+            const reason = (listVal === 'manual') ? (manualReason || "[не вказано причину]") : listVal;      
+              
+            if (listVal.includes("не встановлення візуального контакту") || listVal.includes("не встановлено візуального контакту")) {      
+                firePart = `По цілі не відкрили вогонь через ${reason}.`;      
+            } else if (listVal.includes("не коректну роботу")) {      
+                firePart = `По цілі не відкрили вогонь через ${reason}.`;      
+            } else if (listVal.includes("напрямок ведення вогню")) {      
+                firePart = `По цілі не відкривали вогонь, в зв'язку з тим, що напрямок ведення вогню проходив через населений пункт.`;      
+            } else {      
+                firePart = `По цілі не відкрили вогонь через ${reason}.`;      
+            }      
+        }      
+      
+        const fullText = `${dateTime} 79 ПРИКЗ, ПЗРАЗ, приккшр, МВГр «Скіф» (траса М14, поворот на н.п. Киселівка) - (БРМ «Тандем» п/н «МВГр», 2 в/сл, Browning M2, ПКТ, АК-74) - «Ефір», ${det} ${count} БпЛА «Shahed»${num}, курс ${course}, азимут ${azimuth}, відстань ${dist} м, висота ${alt} м, швидкість ${speed} км/г., в напрямку н.п. ${loc}. ${firePart}`;      
+              
+        document.getElementById('finalText').innerText = fullText;      
+    }      
+      
+    function selectAndCopy() {      
+        const textNode = document.getElementById('finalText');      
+        if (window.getSelection) {      
+            const range = document.createRange();      
+            range.selectNodeContents(textNode);      
+            const selection = window.getSelection();      
+            selection.removeAllRanges();      
+            selection.addRange(range);      
+        }      
+    }      
+      
+    function copyResult() {      
+        const text = document.getElementById('finalText').innerText;      
+        const btn = document.querySelector('.btn-copy');      
+             
+        const textArea = document.getElementById('tempTextArea');      
+        textArea.value = text;      
+        textArea.select();      
+        textArea.setSelectionRange(0, 99999);      
+             
+        try {      
+            document.execCommand('copy');      
+            showSuccess(btn);      
+        } catch (err) {      
+            alert('Помилка автоматичного копіювання. Затисніть пальцем текст та скопіюйте вручну.');      
+        }      
+    }      
+      
+    function showSuccess(btn) {      
+        btn.innerText = "✅ СКОПІЙОВАНО!";      
+        btn.style.backgroundColor = "#1e7e34";      
+        setTimeout(() => {      
+            btn.innerText = "📋 КОПІЮВАТИ ТЕКСТ";      
+            btn.style.backgroundColor = "#34a853";      
+        }, 1500);      
+    }      
+      
+    window.onload = () => {       
+        setCurrentDateTime();       
+              
+        const action = document.getElementById('fireAction').value;      
+        document.getElementById('blockYes').style.display = (action === 'yes') ? 'block' : 'none';      
+        document.getElementById('blockNo').style.display = (action === 'no') ? 'block' : 'none';      
+      
+        const listValue = document.getElementById('fireReasonList').value;      
+        document.getElementById('noFireReasonManual').style.display = (listValue === 'manual') ? 'block' : 'none';      
+      
+        document.getElementById('fieldBrowning').style.display = 'block';      
+        document.getElementById('fieldPkt').style.display = 'none';      
+        document.getElementById('fieldAk').style.display = 'none';      
+      
+        updateText();      
+    };      
+</script>      
+      
+</body>      
+</html>
